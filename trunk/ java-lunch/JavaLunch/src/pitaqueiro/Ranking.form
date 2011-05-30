@@ -1,0 +1,76 @@
+<?xml version="1.1" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <Properties>
+    <Property name="defaultCloseOperation" type="int" value="3"/>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+  </SyntheticProperties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="BotaoVoltar" alignment="1" min="-2" pref="105" max="-2" attributes="0"/>
+                  <Component id="jScrollPane1" alignment="1" pref="594" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jScrollPane1" min="-2" pref="383" max="-2" attributes="0"/>
+              <EmptySpace pref="21" max="32767" attributes="0"/>
+              <Component id="BotaoVoltar" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+      <AuxValues>
+        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JTable" name="TebelaRanking">
+          <Properties>
+            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    matriz,cabesalho) {&#xa;    boolean[] canEdit = new boolean [] {&#xa;        false, false, false, false&#xa;    };&#xa;&#xa;    public boolean isCellEditable(int rowIndex, int columnIndex) {&#xa;        return canEdit [columnIndex];&#xa;    }&#xa;}" type="code"/>
+            </Property>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="List&lt;String[]&gt; Itens = new ArrayList&lt;String[]&gt;();&#xa;List&lt;String&gt; linha = new ArrayList&lt;String&gt;();&#xa;ManipulacaoDeArquivo leArq = new ManipulacaoDeArquivo();&#xa;String [] cabesalho = {&quot;Nome&quot;, &quot;Avalia&#xe7;&#xe3;o&quot;, &quot;Tipo&quot;, &quot;Endere&#xe7;o&quot;};&#xa;String matriz[][]=null;&#xa;try{&#xa;leArq.leEstabelecimentos();&#xa;leArq.leOpinioes();&#xa;List&lt;Estabelecimento&gt; listaEstabelecimento = leArq.getListaEstabelecimento();&#xa;matriz = new String[listaEstabelecimento.size()][4];&#xa;leArq.geraRankingRestaurantes();&#xa;for(int i = 0; i &lt; listaEstabelecimento.size();i++){&#xa;    &#xa;    matriz[i][0] = leArq.getListaRestaurantePopular().get(i).split(&quot;;&quot;)[0];&#xa;    matriz[i][1] = leArq.getListaRestaurantePopular().get(i).split(&quot;;&quot;)[leArq.getListaRestaurantePopular().get(i).split(&quot;;&quot;).length -1]; //UltimoElemento = (leArq.geraRankingRestaurantes().get(i).split(&quot; &quot;).length -1);&#xa;    matriz[i][2] = &quot; Tipo &quot;; //listaEstabelecimento.get(i).getTipoComida();&#xa;    matriz[i][3] = &quot; Endereco &quot; ;//.get(i).getEndereco();&#xa;}&#xa;}catch (Exception ex){&#xa;    ex.getMessage();&#xa;}"/>
+          </AuxValues>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Component class="javax.swing.JButton" name="BotaoVoltar">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Voltar"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BotaoVoltarActionPerformed"/>
+      </Events>
+    </Component>
+  </SubComponents>
+</Form>
