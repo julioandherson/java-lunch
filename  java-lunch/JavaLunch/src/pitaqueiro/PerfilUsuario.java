@@ -2,26 +2,35 @@ package pitaqueiro;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import Exceptions.MapaOpinioesInvalidoException;
-import Exceptions.NomeInvalidoException;
-import Exceptions.NotaRestauranteInvalidoException;
-import Exceptions.RestauranteInvalidoException;
-
+import exception.MapaOpinioesInvalidoException;
+import exception.NomeInvalidoException;
+import exception.NotaRestauranteInvalidoException;
+import exception.RestauranteInvalidoException;
+/**
+ * 
+ * @author Julio, Lucas, Kevin
+ *
+ */
 public class PerfilUsuario {
 	private String Nome;
 	private Map<String, String> mapaOpinioes;
 	private final String NOTA_DEFAULT = "0";
 	private int Semelhanca = 0;
-	private List<Integer> listaNotasUsuario = new ArrayList<Integer>(); //COLOCAR NO CONSTRUTOR
-	
+	private List<Integer> listaNotasUsuario;
+	/**
+	 * Construtor de Perfil de Usuario
+	 * @param Nome do usuario
+	 * @param mapaOpinioes com todas as opinioes e notas dos restaurantes
+	 * @throws Exception se algum parametro for do tipo null ou se Nome for String Vazia
+	 */
 	public PerfilUsuario(String Nome, Map<String, String> mapaOpinioes)throws Exception{
 		if(validaUsuario(Nome, mapaOpinioes)){
+			listaNotasUsuario = new ArrayList<Integer>();
 			this.Nome = Nome;
 			if(mapaOpinioes.size() >= 0){
 				this.mapaOpinioes = mapaOpinioes;
@@ -34,15 +43,29 @@ public class PerfilUsuario {
 				throw new MapaOpinioesInvalidoException();
 		}
 	}
-	
+	/**
+	 * Recupera Nome do Usuario
+	 * @return Nome
+	 */
 	public String getNome() {
 		return Nome;
 	}
-	
+		/**
+	 * Recupera o mapa com todas as opinioes de um determinado usuario
+	 * @return mapaOpinioes
+	 */
 	public Map<String, String> getMapaOpinioes() {
 		return mapaOpinioes;
 	}
-	
+	/**
+	 * Altera a nota do Restaurante
+	 * @param Restaurante
+	 * @param novaNota
+	 * @param MapaOpinioes
+	 * @throws RestauranteInvalidoException se o restaurante passado for null ou string vazia
+	 * @throws NotaRestauranteInvalidoException se a nota for null ou string vazia
+	 * @throws MapaOpinioesInvalidoException se o mapa passado for null
+	 */	
 	public void setMapaOpinioes(String Restaurante, String novaNota, Map<String, String> MapaOpinioes) throws RestauranteInvalidoException, NotaRestauranteInvalidoException, MapaOpinioesInvalidoException {
         if(Restaurante == null || Restaurante.equals("")){
         	throw new RestauranteInvalidoException();
@@ -59,17 +82,26 @@ public class PerfilUsuario {
             }
         }  
 	}
-	
+	/**
+	 * Valida os parametros do construtor
+	 * @param Nome
+	 * @param mapaOpinioes
+	 * @return true se Nome nao for string vazia ou null e se o mapa nao for null, se nao, retorna false
+	 * @throws Exception
+	 */	
 	public boolean validaUsuario(String Nome, Map<String, String> mapaOpinioes) throws Exception{
 		if (!(Nome == null || Nome.equals("") || mapaOpinioes == null)){
 			return true;
 			}
 		return false;
 	}
-	
+	/**
+	 * Se o usuario nao votar em nenhum restaurante vai gerar um mapa com todos os restaurantes com nota 0, e se ele passar um mapa contendo alguns restaurantes com votacao, ele vai preservar os votados e completar com os outros com nota 0
+	 * @throws Exception se nao conseguir le os estabelecimento
+	 */	
 	public void GeraRecomendacoesDefault() throws Exception{
 		ManipulacaoDeArquivo Manipulacao = new ManipulacaoDeArquivo();
-		//Manipulacao.leEstabelecimentos(); //Metodo que gera Lista de Restaurantes
+		Manipulacao.leEstabelecimentos(); //Metodo que gera Lista de Restaurantes
 		
 		for(String Restaurante : Manipulacao.getListaRestaurantes()){
 			if(!(mapaOpinioes.containsKey(Restaurante))){
@@ -77,7 +109,12 @@ public class PerfilUsuario {
 			}
 		}
 	}
-		
+	/**
+	 * Transforma o mapa em String, para poder escrever no arquivo
+	 * @param Manipulacao
+	 * @return
+	 * @throws IOException
+	 */		
 	public String MapaOpinioestoString(ManipulacaoDeArquivo Manipulacao) throws IOException {
 		Manipulacao.leEstabelecimentos(); //Metodo que gera Lista de Restaurantes
 		String Chave;
@@ -118,21 +155,33 @@ public class PerfilUsuario {
 		}
 		return Concatena;
 	}
+	/**
+	 * Recupera o produto escalar do usuario em relacao a todos os outros
+	 * @return Semelhanca
+	 */
 	
-	//FALTA TESTA
 	public int getSemelhanca() {
 		return Semelhanca;
 	}
 
-	//FALTA TESTA
+	/**
+	 * Altera o produto escalar
+	 * @param semelhanca
+	 */
+	
 	public void setSemelhanca(int semelhanca) {
 		Semelhanca = semelhanca;
 	}
 	
-	//FALTA TESTE
+		/**
+	 * Gera lista de notas com o valor dos votos do usuario pra cada restaurante
+	 * @param Manipulacao pra acessar os metodos da classe
+	 * @throws IOException
+	 */
 	public void GeraListNotasUsuario(ManipulacaoDeArquivo Manipulacao) throws IOException{
 //		Manipulacao.leEstabelecimentos(); //Metodo que gera Lista de Restaurantes ---- >TIRAR DEPOIS
-		String[] Opiniao;
+		if(!(listaNotasUsuario.size()==Manipulacao.getListaRestaurantes().size())){
+                String[] Opiniao;
 		String Chave;
 		String Valor;
 		List<String> listaRestaurante = Manipulacao.getListaRestaurantes();
@@ -141,10 +190,17 @@ public class PerfilUsuario {
 			Opiniao = mapaOpinioes.get(Chave).split(":");
 			Valor = Opiniao[0].trim();
 			listaNotasUsuario.add(Integer.parseInt(Valor)); //USADO NO ALGORITMO PERSONALIZADO (LISTA NOTAS ORDENADA DOS RESTAURANTES)
-		}
+                        
+                }
+               
+                }
+                
 	}
 	
-	//FALTA TESTE
+	/**
+	 * Recupera a lista de Nota do usuario
+	 * @return listaNotasUsuario
+	 */	
 	public List<Integer> getListaNotasUsuario() {
 		return listaNotasUsuario;
 	}
@@ -200,5 +256,4 @@ public class PerfilUsuario {
 			
 
 	}
-         
 }

@@ -44,7 +44,7 @@ public class LeituraDeArquivo {
          * Le e guarda em uma List<String> os estabelecimentos que estao no arquivo
          */
 	public void leEstabelecimentos() throws IOException{
-		String diretorioRestaurantes =  "C:/Users/Lucas/workspace/JavaLunch/src/Arquivos/lista_estabelecimentos_projeto_lp2.csv";
+		String diretorioRestaurantes = "C:/Users/Lucas/Documents/NetBeansProjects/Pitaqueiro/src/Arquivos/lista_estabelecimentos_projeto_lp2.csv";
 		BufferedReader leituraRestaurantes = null;
                 
 		try {
@@ -70,7 +70,7 @@ public class LeituraDeArquivo {
          * Le e guarda em uma List<String> as opinioes od usuarios que estao no arquivo
          */
 	public void leOpinioes() throws IOException{
-		String diretorioOpinioes =  "C:/Users/Lucas/workspace/JavaLunch/src/Arquivos/opinioes-dos-usuarios-v1.csv";
+		String diretorioOpinioes = "C:/Users/Lucas/Documents/NetBeansProjects/Pitaqueiro/src/Arquivos/opinioes-dos-usuarios-v1.csv";
 		BufferedReader leituraOpinioes = null;
 		final int QUANTIDADE_RESTAURANTES = 39;
 		int Somador = 0;
@@ -109,7 +109,7 @@ public class LeituraDeArquivo {
          * Le e guarda em uma List<String> os usuarios que estao no arquivo
          */
 	public void lePerfis() throws IOException{
-		String diretorioPerfis =  "C:/Users/Lucas/workspace/JavaLunch/src/Arquivos/Perfis.txt";
+		String diretorioPerfis = "C:/Users/Lucas/Documents/NetBeansProjects/Pitaqueiro/src/Arquivos/Perfis.txt";
 		BufferedReader leituraPerfil = null;
 		try {
 			leituraPerfil = new BufferedReader(new FileReader(diretorioPerfis));
@@ -139,7 +139,7 @@ public class LeituraDeArquivo {
          * 
          */
 	public void Escreve(String Perfil) throws IOException{
-		String Diretorio =  "C:/Users/Lucas/workspace/JavaLunch/src/Arquivos/Perfis.txt";
+		String Diretorio = "C:/Users/Lucas/Documents/NetBeansProjects/Pitaqueiro/src/Arquivos/Perfis.txt";
 		BufferedWriter out = null;
 		String novaLinha = System.getProperty("line.separator"); 
 		try {

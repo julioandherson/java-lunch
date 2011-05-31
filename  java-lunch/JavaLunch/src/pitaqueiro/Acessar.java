@@ -276,9 +276,9 @@ public class Acessar extends javax.swing.JFrame {
             usuario  = RetornaUsuario(IndiceUsuario);
             
             
-            /*
-             * Desenha a tabela
-             */
+       /*
+        * Desenha a tabela
+        */
             
             List<String> ListaTeste;
             ManipulacaoDeArquivo manipulaArq = new ManipulacaoDeArquivo();
@@ -305,6 +305,7 @@ public class Acessar extends javax.swing.JFrame {
 
             }
             }catch (Exception ex){
+                System.out.print(ex.getMessage());
                 ex.getMessage();
             }
             Tabela = new javax.swing.JTable();
@@ -323,8 +324,7 @@ public class Acessar extends javax.swing.JFrame {
             jScrollPane1.setViewportView(Tabela);
 
             PainelTabela.setVisible(true);
-            
-        }
+    }
         
     }//GEN-LAST:event_BotaoGerarRecomendacoesActionPerformed
 
