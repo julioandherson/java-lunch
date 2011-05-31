@@ -12,34 +12,40 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+/**
+ * 
+ * @author Julio, Lucas, Kevin
+ *
+ */
 public class ManipulacaoDeArquivo {
 	private List<Estabelecimento> listaEstabelecimento;
-	private Map<String, String> mapaOpinioes;
 	private List<String> listaRestaurantes;
 	private List<Opinioes> listaOpinioes;
-	private List<String> listaElementosPerfil;
 	private List<Integer> listaNotas;
 	private Map<Integer, List<String>> mapaRanking;
 	private List<String> listaRestaurantePopular;
 	private List<PerfilUsuario> listaPerfilUsuarioSistema;
-	public List<Integer> listaProdutoEscalar;
+	private List<Integer> listaProdutoEscalar;
 	
+	/**
+	 * Construtor de ManipulacaoDeArquivo, que inicializa as colecoes
+	 */
 	public ManipulacaoDeArquivo(){
 		listaEstabelecimento = new ArrayList<Estabelecimento>();
-		mapaOpinioes = new HashMap<String, String>();
 		listaRestaurantes = new ArrayList<String>();
 		listaOpinioes = new ArrayList<Opinioes>();
-		listaElementosPerfil = new ArrayList<String>();
 		listaNotas = new ArrayList<Integer>(); //NOTAS EQUIVALENTE AO INDICE DA LISTA DE RESTAURANTE
 		mapaRanking = new HashMap<Integer, List<String>>();
 		listaPerfilUsuarioSistema = new ArrayList<PerfilUsuario>();
 		listaRestaurantePopular = new ArrayList<String>();
 		listaProdutoEscalar = new ArrayList<Integer>();
 	}
-	
+	/**
+	 * Metodo que le os Estabelecimentos, gera uma lista do tipo String com todos os restaurantes e gera uma lista do tipo Estabelecimento com todos os estabelecimento
+	 * @throws IOException se nao conseguir le o arquivo corretamente
+	 */
 	public void leEstabelecimentos() throws IOException{
-		String diretorioRestaurantes = "C:/Users/Lucas/workspace/JavaLunch/src/Arquivos/lista_estabelecimentos_projeto_lp2.csv";
+		String diretorioRestaurantes = "C:/Users/Lucas/Documents/NetBeansProjects/Pitaqueiro/src/Arquivos/lista_estabelecimentos_projeto_lp2.csv";
 		BufferedReader leituraRestaurantes = null;
 		try {
 			leituraRestaurantes = new BufferedReader(new FileReader(diretorioRestaurantes));
@@ -58,8 +64,12 @@ public class ManipulacaoDeArquivo {
 		}
 	}
 	
+	/**
+	 * Metodo que le as opinioes dos usuarios, gera uma lista do tipo Opinioes e adiciona todos os usuarios do arquivo em uma lista do tipo PerfilUsuario
+	 * @throws IOException se nao conseguir le o arquivo corretamente
+	 */
 	public void leOpinioes() throws IOException{
-		String diretorioOpinioes =  "C:/Users/Lucas/workspace/JavaLunch/src/Arquivos/opinioes-dos-usuarios-v1.csv";
+		String diretorioOpinioes = "C:/Users/Lucas/Documents/NetBeansProjects/Pitaqueiro/src/Arquivos/opinioes-dos-usuarios-v1.csv";
 		BufferedReader leituraOpinioes = null;
 		int QUANTIDADE = 40; //ESSA QT VAI PODER MUDAR
 		try {
@@ -68,7 +78,7 @@ public class ManipulacaoDeArquivo {
 			while (leituraOpinioes.ready()) {
 		    	Linha = leituraOpinioes.readLine().split(";");
 		    	int indiceArray; //Array de Restaurantes
-		    	mapaOpinioes = new HashMap<String, String>(); //Sempre tem que ser reinicializado
+		    	Map<String, String> mapaOpinioes = new HashMap<String, String>(); //Sempre tem que ser reinicializado
 		    	for(int indiceLinha = 2; indiceLinha <= QUANTIDADE; indiceLinha ++){
 		    		indiceArray = indiceLinha - 2;	    		
 		    		mapaOpinioes.put(listaRestaurantes.get(indiceArray), Linha[indiceLinha]); //MAPEIA RESTAURANTE COM SUA RESPECTIVA NOTA
@@ -86,15 +96,18 @@ public class ManipulacaoDeArquivo {
 			leituraOpinioes.close();
 		}	
 	}
-	
+	/**
+	 * Escreve no Arquivo
+	 * @param Perfil uma String concatenada dessa forma NOMEUSUARIO;MAPAOPINIOES
+	 * @throws IOException se nao conseguir le ou escrever no arquivo corretamente 
+	 */
 	public void EscreveOpinioes(String Perfil) throws IOException{
-		String diretorioOpinioes = "C:/Users/Lucas/workspace/JavaLunch/src/Arquivos/opinioes-dos-usuarios-v1.csv";
+		String diretorioOpinioes = "C:/Users/Lucas/Documents/NetBeansProjects/Pitaqueiro/src/Arquivos/opinioes-dos-usuarios-v1.csv";
 		BufferedWriter out = null;
 		String novaLinha = System.getProperty("line.separator"); 
 		try {
 			out = new BufferedWriter(new FileWriter(diretorioOpinioes, true));
 			out.write(getDataHora() + ";" + Perfil + novaLinha);
-			listaElementosPerfil.add(Perfil);
 		}catch(IOException erro){
 			System.err.println(erro.getMessage());
 		}
@@ -102,7 +115,9 @@ public class ManipulacaoDeArquivo {
 			out.close();
 		}
 	}
-	
+	/**
+	 * Vai preencher a listaRestaurantePopular com uma String "RESTAURANTE NOTA", em ordem crescente de popularidade
+	 */
 	public void geraRankingRestaurantes(){
 		int Somador = 0;
 		String[] Nota = null;
@@ -153,6 +168,12 @@ public class ManipulacaoDeArquivo {
 		}
 	}
 	
+	/**
+	 * Calcula produtoEscalar de todos os usuarios que estao no arquivo, e adiciona esse produto aos seus Atributos
+	 * @param perfil a ser comparado com os demais
+	 * @param Manipulacao usado para acessar os metodos da classe
+	 * @throws IOException se ocorrer algum erro na leitura
+	 */
 	public void calculaProdutoEscalar(PerfilUsuario perfil, ManipulacaoDeArquivo Manipulacao) throws IOException{
 		int SomaProduto;
 		int Produto;
@@ -173,47 +194,54 @@ public class ManipulacaoDeArquivo {
 		}
 	}
 	
+	/**
+	 * Vai preencher a lista RestaurantesRecomendados com os restaurantes que sao recomendados por um usuario mais semelhante ao usuario a ser comparado
+	 * @param perfil usuario a ser comparado com os demais
+	 * @param Manipulacao usado para acessar os metodos da classe
+	 * @return a lista com os Restaurantes mais Recomendados em ordem decrescente
+	 * @throws IOException se ocorrer algum erro na leitura
+	 */
 	public List<String> getRecomendacoesRestaurantes(PerfilUsuario perfil, ManipulacaoDeArquivo Manipulacao) throws IOException{
-		List<Integer> listaNotas = new ArrayList<Integer>();
 		List<String> RestaurantesRecomendados = new ArrayList<String>();
 		
 		calculaProdutoEscalar(perfil, Manipulacao);
-		
+	
 		Collections.sort(listaProdutoEscalar);
 		Collections.reverse(listaProdutoEscalar);
-		
+
 		for (int i = 0; i < listaProdutoEscalar.size(); i++) {
 			for(PerfilUsuario perfilSistema : getListaPerfilUsuarioSistema()){
-				listaNotas.removeAll(listaNotas);
-				if(listaProdutoEscalar.get(i) == perfilSistema.getSemelhanca()){ 			//verificar o perfil semelhante
+				if(listaProdutoEscalar.get(i) == perfilSistema.getSemelhanca()){
 					for (int j = 0; j < perfil.getListaNotasUsuario().size(); j++) {
-						//TEM QUE BOTAR O GERAR NOTAS AQUI
-//						Manipulacao.getListaRestaurantes().get(j).setConceito(perf.getListaNotasUsuario().get(j));
-						listaNotas.add(perfilSistema.getListaNotasUsuario().get(j));	
-					}
-					
-					Collections.sort(listaNotas);
-					Collections.reverse(listaNotas);
-					
-					for (int j = 0; j < listaNotas.size(); j++) {
-						if (listaNotas.get(j) > 0){
-							for (int j2 = 0; j2 < getListaRestaurantes().size(); j2++) {
-//								if (notas.get(j) == Manipulacao.getListaRestaurantes().get(j2).getConceito()){
-									if (perfil.getListaNotasUsuario().get(j2) == 0){
-										if (!RestaurantesRecomendados.contains(getListaRestaurantes().get(j2))){
-											RestaurantesRecomendados.add(getListaRestaurantes().get(j2));
-										}
-									}
-								}
+                                            if(perfilSistema.getListaNotasUsuario().size() == 0){
+                                                perfilSistema.GeraListNotasUsuario(Manipulacao);
+                                            }
+                                            if(perfil.getListaNotasUsuario().size() == 0){
+                                                perfil.GeraListNotasUsuario(Manipulacao);
+                                            }
+                                            
+                                            
+                                            
+                                            
+                                            System.out.println(perfilSistema.getListaNotasUsuario().size()+" "+perfil.getListaNotasUsuario().size()+ " "+j);
+						if(perfilSistema.getListaNotasUsuario().get(j) > perfil.getListaNotasUsuario().get(j) && perfil.getListaNotasUsuario().get(j) == 0){
+
+							if(!(RestaurantesRecomendados.contains(listaRestaurantes.get(j)))){
+								RestaurantesRecomendados.add(listaRestaurantes.get(j));
 							}
-						}
+                                                }
+						
 					}
 				}
 			}
-                        
-			return RestaurantesRecomendados;
 		}
+		return RestaurantesRecomendados;
+	}
 	
+	/**
+	 * Gera a data e a hora atual do sistema
+	 * @return String com data e hora
+	 */
 	private String getDataHora(){
 		String DataHora;
 		Date date = new Date();
@@ -222,31 +250,43 @@ public class ManipulacaoDeArquivo {
 	    DataHora = sdf.format(date);
 	    return DataHora;
 	}
-
+	
+	/**
+	 * Recupera a lista do tipo Estabelecimento (So pode ser chamado depois que chamar o metodo leEstabelecimento)
+	 * @return listaEstabelecimento
+	 */
 	public List<Estabelecimento> getListaEstabelecimento() {
 		return listaEstabelecimento;
 	}
-
-	public Map<String, String> getMapaOpinioes() {
-		return mapaOpinioes;
-	}
-
+	
+	/**
+	 * Recupera lista de String com os restaurantes(so pode ser chamado depois que chamar o metodo leEstabelecimento)
+	 * @return listaRestaurantes
+	 */
 	public List<String> getListaRestaurantes() {
 		return listaRestaurantes;
 	}
-
+	
+	/**
+	 * Recupera a lista do tipo Opinioes (So pode ser chamado depois que chamar leEstabelecimento e depois leOpinioes)
+	 * @return listaOpinioes
+	 */
 	public List<Opinioes> getListaOpinioes() {
 		return listaOpinioes;
 	}
-
-	public List<String> getListaElementosPerfil(){
-		return listaElementosPerfil;
-	}
 	
+	/**
+	 * Lista do tipo PerfilUsuario, onde os usuarios lido do arquivo sao colocados(so pode ser chamado apoes chamar o metodo leEstabelecimentos e leOpinioes)
+	 * @return listaPerfilUsuarioSistema
+	 */
 	public List<PerfilUsuario> getListaPerfilUsuarioSistema(){
 		return listaPerfilUsuarioSistema;
 	}
-
+	
+	/**
+	 * Recupera o a lista de String dos Restaurantes mais populares
+	 * @return listaRestaurantePopular
+	 */
 	public List<String> getListaRestaurantePopular() {
 		return listaRestaurantePopular;
 	}

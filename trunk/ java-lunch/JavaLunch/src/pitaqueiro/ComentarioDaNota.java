@@ -1,5 +1,9 @@
 package pitaqueiro;
-
+/**
+ * 
+ * @author Julio, Lucas, Kevin
+ *
+ */
 public enum ComentarioDaNota {
 	INCRIVEL("Incrivel, sensacional, impressionante"), //Nota 5
 	MUITO_BOM("Muito bom"), //Nota 4
@@ -14,11 +18,18 @@ public enum ComentarioDaNota {
 	DETESTO("Detesto"); //Nota -5
 	
 	private String Comentario;
-	
+		
+	/**
+	 * Construtor Enum que recebe um Comentario como parametro
+	 * @param Comentario sobre o restaurante
+	 */
 	private ComentarioDaNota(String Comentario){
 		this.Comentario = Comentario;
 	}
-	
+	/**
+	 * Recupera o Comentario
+	 * @return o Comentario
+	 */
 	public String getComentario(){
 		return Comentario;
 	}

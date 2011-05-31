@@ -10,12 +10,12 @@
  */
 package pitaqueiro;
 
-import Exceptions.NomeInvalidoException;
-import Exceptions.NotaRestauranteInvalidoException;
-import Exceptions.QuantidadeRecomendacoesInvalidoException;
-import Exceptions.RestauranteInvalidoException;
-import Exceptions.TipoPreferenciaInvalidoException;
-import Exceptions.MapaOpinioesInvalidoException;
+import exception.NomeInvalidoException;
+import exception.NotaRestauranteInvalidoException;
+import exception.QuantidadeRecomendacoesInvalidoException;
+import exception.RestauranteInvalidoException;
+import exception.TipoPreferenciaInvalidoException;
+import exception.MapaOpinioesInvalidoException;
 import com.sun.java_cup.internal.runtime.Symbol;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -510,7 +510,8 @@ public class Cadastra2 extends javax.swing.JFrame {
             Logger.getLogger(Cadastra2.class.getName()).log(Level.SEVERE, null, ex);
         } 
         }
-      
+      this.dispose();
+      new Menu().show();
     }//GEN-LAST:event_BotaoConfirmaCadastroActionPerformed
 
     private void BarraTextNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BarraTextNomeActionPerformed
@@ -620,7 +621,7 @@ public class Cadastra2 extends javax.swing.JFrame {
         
         else if(Algoritmo.toUpperCase().equals("POPULARIDADE")||Algoritmo.toUpperCase().equals("PERSONALIZADO")){
             
-        nome = "Anonimo";
+        nome = "Temporario";
         
 
        
@@ -665,56 +666,62 @@ public class Cadastra2 extends javax.swing.JFrame {
       
         
         
-        /*
-         * Desenha a tabela
-         */
              
-             List<String> ListaTeste;
-             ManipulacaoDeArquivo manipulaArq = new ManipulacaoDeArquivo();
-             
-             String [] cabesalho = {"Estanelecimento","Avaliacao global"};
-             String matriz[][]=null;
-             try{
-             manipulaArq.leEstabelecimentos();
-             manipulaArq.leOpinioes();
-             List<Estabelecimento> listaEstabelecimento = manipulaArq.getListaEstabelecimento();
-             matriz = new String[IntNumRecomendacoes][2];
-             manipulaArq.geraRankingRestaurantes();
-             for(int i = 0; i < IntNumRecomendacoes;i++){
-                 if(Algoritmo.equals("POPULARIDADE")){
-                     matriz[i][0] =manipulaArq.getListaRestaurantePopular().get(i).split(";")[0];
-                     matriz[i][1] =manipulaArq.getListaRestaurantePopular().get(i).split(";")[1];
-                 }
-                 else if(Algoritmo.toUpperCase().equals("PERSONALIZADO")){
-                    
-                    
-                     matriz[i][0] =manipulaArq.getRecomendacoesRestaurantes(usuario, manipulaArq).get(i);
-                     matriz[i][1] =null;
-                 }
+            
+       /*
+        * Desenha a tabela
+        */
+            
+            List<String> ListaTeste;
+            ManipulacaoDeArquivo manipulaArq = new ManipulacaoDeArquivo();
+            
+            String [] cabesalho = {"Estanelecimento","Avaliacao global"};
+            String matriz[][]=null;
+            try{
+            manipulaArq.leEstabelecimentos();
+            manipulaArq.leOpinioes();
+            List<Estabelecimento> listaEstabelecimento = manipulaArq.getListaEstabelecimento();
+            matriz = new String[IntNumRecomendacoes][2];
+            manipulaArq.geraRankingRestaurantes();
+            List<String> Recomendacoes = manipulaArq.getRecomendacoesRestaurantes(usuario, manipulaArq);
+            for(int i = 0; i < IntNumRecomendacoes;i++){
+                if(Algoritmo.equals("POPULARIDADE")){
+                    matriz[i][0] =manipulaArq.getListaRestaurantePopular().get(i).split(";")[0];
+                    matriz[i][1] =manipulaArq.getListaRestaurantePopular().get(i).split(";")[1];
+                }
+                else if(Algoritmo.toUpperCase().equals("PERSONALIZADO")){
+                   
+                   
+                    matriz[i][0] =Recomendacoes.get(i);
+                    matriz[i][1] =null;
+                }
 
-             }
-             }catch (Exception ex){
-                 ex.getMessage();
-             }
-             Tabela = new javax.swing.JTable();
+            }
+            }catch (Exception ex){
+                System.out.print(ex.getMessage());
+                ex.getMessage();
+            }
+            Tabela = new javax.swing.JTable();
 
-             Tabela.setModel((new javax.swing.table.DefaultTableModel(
-                 matriz,cabesalho) {
-                 boolean[] canEdit = new boolean [] {
-                     false, false, false, false
-                 };
+            Tabela.setModel((new javax.swing.table.DefaultTableModel(
+                matriz,cabesalho) {
+                boolean[] canEdit = new boolean [] {
+                    false, false, false, false
+                };
 
-                 public boolean isCellEditable(int rowIndex, int columnIndex) {
-                     return canEdit [columnIndex];
-                 }
-             }));
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return canEdit [columnIndex];
+                }
+            }));
 
-             jScrollPane1.setViewportView(Tabela);
+            jScrollPane1.setViewportView(Tabela);
 
-             PainelTabela.setVisible(true);
-             
+            PainelTabela.setVisible(true);
+    
+            
         
 
+      
     }//GEN-LAST:event_BotaoGerarRecomendacoesActionPerformed
 
     
